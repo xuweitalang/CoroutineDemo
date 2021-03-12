@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.homepage.MainFragment">
+
+    <com.wpg.coroutine.view.CustomNavigationBarView
+        android:id="@+id/homePagNv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isShow_left_img="false"
+        app:isShow_right_img1="false"
+        app:isShow_right_img2="true"
+        app:isShow_tab_layout="true" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/homePageVp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
