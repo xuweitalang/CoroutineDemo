@@ -1,0 +1,2 @@
+1.kotlin中的job类似于java中thread;
+2.协程中的job.join方法要求等待协程执行完才会执行后续的操作;
