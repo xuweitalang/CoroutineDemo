@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 
 /**
  *
@@ -62,3 +63,6 @@ private var <T : View> T.triggerDelay: Long
     set(value) {
         setTag(1123461123, value)
     }
+
+fun String?.htmlToSpanned() =
+    if (this.isNullOrEmpty()) "" else HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
