@@ -20,7 +20,7 @@ import org.jetbrains.anko.*
  * @Date:          2021/3/15 9:58
  * @Description:
  */
-open class LoadPageViewForStatus constructor(
+open class LoadPageViewForStatus @JvmOverloads constructor(
     context: Context,
     attributes: AttributeSet? = null,
     defStyleAttr: Int = 0
