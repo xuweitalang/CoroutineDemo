@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.homepage.HomePageFragment">
+    tools:context=".ui.homemine.MyHomePageFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/home_page" />
+        android:gravity="center"
+        android:text="@string/project_home_page" />
 
 </FrameLayout>

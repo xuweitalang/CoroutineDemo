@@ -21,8 +21,8 @@ class MainFragment : BaseFragment() {
         LiveEventBus.get(HOME_PAGE_CUT).observe(this, Observer {
             homePageVp.setCurrentItem(0, true)
         })
-        var homePageFragment = HomePageFragment()
-        var mainProjectFragment = MainProjectFragment()
+        val homePageFragment = HomePageFragment()
+        val mainProjectFragment = MainProjectFragment()
         val fragments = listOf(homePageFragment, mainProjectFragment)
         homePageVp.adapter = activity?.let { MyFragmentPagerAdapter(it, fragments) }
         homePageVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

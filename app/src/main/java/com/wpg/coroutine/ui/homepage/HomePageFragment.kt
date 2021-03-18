@@ -1,10 +1,13 @@
 package com.wpg.coroutine.ui.homepage
 
+import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
+import com.coder.zzq.smartshow.toast.SmartToast
 import com.wpg.coroutine.R
 import com.wpg.coroutine.adapter.HomePageAdapter
 import com.wpg.coroutine.adapter.HomePageStickAdapter
+import com.wpg.coroutine.adapter.ImageAdapter
 import com.wpg.coroutine.ui.base.BaseVMFragment
 import com.wpg.coroutine.ui.main.DetailActivity
 import com.wpg.coroutine.ui.main.MainActivity
@@ -13,6 +16,7 @@ import com.wpg.coroutine.view.loadpage.BasePageViewForStatus
 import com.wpg.coroutine.view.loadpage.LoadPageViewForStatus
 import com.wpg.coroutine.vm.HomePageViewModel
 import kotlinx.android.synthetic.main.fragment_recycleview.*
+import kotlinx.android.synthetic.main.layout_banner.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import org.koin.android.ext.android.inject
@@ -25,6 +29,7 @@ class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener
     private lateinit var rootView: LoadPageViewForStatus
     private lateinit var homePageHeadView: HomePageHeadView
     override fun setLayoutId(): Int = R.layout.fragment_recycleview
+    override fun initVM(): HomePageViewModel = getViewModel()
     override fun initView() {
         rootView =
             (loadPageViewForStatus.getRootView(activity as MainActivity) as LoadPageViewForStatus).apply {
@@ -52,19 +57,56 @@ class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener
         refresh()
     }
 
-    override fun initVM(): HomePageViewModel = getViewModel()
-
     override fun startObserve() {
-        TODO("Not yet implemented")
+        mViewModel.run {
+            mListModel.observe(this@HomePageFragment, Observer {
+                if (it.isRefresh) refreshLayout.finishRefresh(it.isRefreshSuccess)
+                if (it.showEnd) homePageAdapter.loadMoreModule.loadMoreEnd()
+                it.loadPageStatus?.value?.let { loadPageStatus ->
+                    rootView.let { rootView ->
+                        loadPageViewForStatus.convert(rootView, loadPageStatus = loadPageStatus)
+                        homePageAdapter.setEmptyView(rootView)
+                    }
+                }
+                it.showSuccess?.let { list ->
+                    homePageAdapter.run {
+                        if (it.isRefresh) setList(list) else addData(list)
+                        loadMoreModule.isEnableLoadMore = true
+                        loadMoreModule.loadMoreComplete()
+                        mViewModel.loadBanner() //列表加载成功后再加载banner
+                    }
+                }
+                it.showError.let { errorMsg ->
+                    homePageAdapter.loadMoreModule.loadMoreFail()
+                    SmartToast.show(errorMsg)
+                }
+            })
+            mBanner.observe(this@HomePageFragment, Observer { banners ->
+                banner?.adapter = activity?.let { ImageAdapter(banners, it) }
+                mViewModel.loadStickArticles()
+            })
+            mStickArticles.observe(this@HomePageFragment, Observer { articles ->
+                homePageStickAdapter.setList(articles)
+            })
+        }
     }
 
     private fun refresh() {
-
-
+        mViewModel.loadHomeArticles(true)
     }
 
     override fun onLoadMore() {
+        mViewModel.loadHomeArticles(false)
+    }
 
+    override fun onStart() {
+        super.onStart()
+        banner?.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        banner?.stop()
     }
 
 }

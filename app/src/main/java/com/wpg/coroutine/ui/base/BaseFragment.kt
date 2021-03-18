@@ -27,7 +27,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!isLoaded && isHidden) {
+        if (!isLoaded && !isHidden) {
             onFragmentFirstVisible()
             isLoaded = true
         }

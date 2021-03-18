@@ -1,6 +1,7 @@
 package com.wpg.coroutine.ui.homesystem
 
-import androidx.fragment.app.Fragment
+import com.wpg.coroutine.R
+import com.wpg.coroutine.ui.base.BaseFragment
 
 /**
  *
@@ -8,5 +9,14 @@ import androidx.fragment.app.Fragment
  * @Date:          2021/3/12 14:06
  * @Description:
  */
-class HomeSystemFragment : Fragment() {
+class HomeSystemFragment : BaseFragment() {
+    override fun setLayoutId(): Int = R.layout.fragment_home_system
+
+    override fun initView() {
+        TODO("Not yet implemented")
+    }
+
+    override fun initData() {
+        TODO("Not yet implemented")
+    }
 }

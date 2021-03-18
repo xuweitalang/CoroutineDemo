@@ -9,7 +9,9 @@ import com.jeremyliao.liveeventbus.LiveEventBus
 import com.wpg.coroutine.R
 import com.wpg.coroutine.ext.SET_THEME
 import com.wpg.coroutine.ui.base.BaseActivity
+import com.wpg.coroutine.ui.homemine.MyHomePageFragment
 import com.wpg.coroutine.ui.homepage.MainFragment
+import com.wpg.coroutine.ui.homeplaza.MainPlazaFragment
 import com.wpg.coroutine.ui.homesystem.HomeSystemFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,6 +45,8 @@ class MainActivity : BaseActivity() {
         fragments.apply {
             add(MainFragment())
             add(HomeSystemFragment())
+            add(MainPlazaFragment())
+            add(MyHomePageFragment())
         }
         if (savedInstanceState == null) {
             //根据传入的Bundle对象判断是正常启动还是重建 true表示正常启动，false表示重建
@@ -52,8 +56,10 @@ class MainActivity : BaseActivity() {
         //BottomNavigationView 点击事件监听
         bottom_nav_view.setOnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
-                R.id.home_mine -> setSelectFragment(0)
+                R.id.home_page -> setSelectFragment(0)
                 R.id.home_system -> setSelectFragment(1)
+                R.id.home_plaza -> setSelectFragment(2)
+                R.id.home_mine -> setSelectFragment(3)
             }
             true
         }
