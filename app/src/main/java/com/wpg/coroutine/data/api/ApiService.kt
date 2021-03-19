@@ -2,6 +2,7 @@ package com.wpg.coroutine.data.api
 
 import com.wpg.coroutine.data.bean.Article
 import com.wpg.coroutine.data.bean.Banner
+import com.wpg.coroutine.data.bean.ClassifyResponse
 import com.wpg.coroutine.data.bean.WanListResponse
 import com.wpg.coroutine.data.bean.base.WanResponse
 import retrofit2.http.GET
@@ -32,5 +33,11 @@ interface ApiService {
      */
     @GET("/article/top/json")
     suspend fun getStickArticles(): WanResponse<List<Article>>
+
+    /**
+     * 项目分类
+     */
+    @GET("/project/tree/json")
+    suspend fun getProjectTypes(): WanResponse<MutableList<ClassifyResponse>>
 
 }

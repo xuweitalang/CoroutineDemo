@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wpg.coroutine">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".app.MyApplication"
@@ -15,7 +18,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.main.DetailActivity" />
         <activity android:name=".ui.main.search.SearchActivity" />
-        <activity android:name=".ui.WelcomeActivity">
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +30,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTask" />
+            android:screenOrientation="portrait" />
 
         <!-- 头条适配autosize -->
         <meta-data

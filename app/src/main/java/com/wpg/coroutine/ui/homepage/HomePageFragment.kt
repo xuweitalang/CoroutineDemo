@@ -3,7 +3,6 @@ package com.wpg.coroutine.ui.homepage
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
-import com.coder.zzq.smartshow.toast.SmartToast
 import com.wpg.coroutine.R
 import com.wpg.coroutine.adapter.HomePageAdapter
 import com.wpg.coroutine.adapter.HomePageStickAdapter
@@ -21,12 +20,13 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import timber.log.Timber
 
 class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener {
     private val homePageAdapter = HomePageAdapter()
     private val homePageStickAdapter = HomePageStickAdapter()
     private val loadPageViewForStatus: BasePageViewForStatus by inject()
-    private lateinit var rootView: LoadPageViewForStatus
+    private var rootView: LoadPageViewForStatus? = null
     private lateinit var homePageHeadView: HomePageHeadView
     override fun setLayoutId(): Int = R.layout.fragment_recycleview
     override fun initVM(): HomePageViewModel = getViewModel()
@@ -40,11 +40,12 @@ class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener
             adapter = homePageAdapter
         }
 
-        homePageHeadView = HomePageHeadView(activity, homePageStickAdapter)
         homePageAdapter.apply {
+            homePageHeadView = HomePageHeadView(activity, homePageStickAdapter)
             loadMoreModule.setOnLoadMoreListener(this@HomePageFragment)
             isAnimationFirstOnly = true
             setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn)
+            activity?.let { addHeaderView(homePageHeadView) }
             setOnItemClickListener { adapter, view, position ->
                 startActivity<DetailActivity>(DetailActivity.PARAM_ARTICLE to data[position])
             }
@@ -63,7 +64,7 @@ class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener
                 if (it.isRefresh) refreshLayout.finishRefresh(it.isRefreshSuccess)
                 if (it.showEnd) homePageAdapter.loadMoreModule.loadMoreEnd()
                 it.loadPageStatus?.value?.let { loadPageStatus ->
-                    rootView.let { rootView ->
+                    rootView?.let { rootView ->
                         loadPageViewForStatus.convert(rootView, loadPageStatus = loadPageStatus)
                         homePageAdapter.setEmptyView(rootView)
                     }
@@ -78,7 +79,8 @@ class HomePageFragment : BaseVMFragment<HomePageViewModel>(), OnLoadMoreListener
                 }
                 it.showError.let { errorMsg ->
                     homePageAdapter.loadMoreModule.loadMoreFail()
-                    SmartToast.show(errorMsg)
+                    Timber.e(errorMsg)
+//                    SmartToast.show(errorMsg)
                 }
             })
             mBanner.observe(this@HomePageFragment, Observer { banners ->
