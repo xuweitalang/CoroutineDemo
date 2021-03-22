@@ -36,9 +36,21 @@ class ArticleUserCase(var remoteDataSource: RemoteDataSource) {
         loadPageStatus: MutableLiveData<LoadPageStatus>
     ) = getArticleList(ArticleType.Home, isRefresh, listModel, loadPageStatus)
 
+    suspend fun getLatestProjectList(
+        isRefresh: Boolean = false,
+        listModel: MutableLiveData<ListModel<Article>>?,
+        loadPageStatus: MutableLiveData<LoadPageStatus>
+    ) = getArticleList(ArticleType.LatestProject, isRefresh, listModel, loadPageStatus)
+
+    suspend fun getProjectTypeDetailList(
+        isRefresh: Boolean = false,
+        listModel: MutableLiveData<ListModel<Article>>?,
+        loadPageStatus: MutableLiveData<LoadPageStatus>,
+        cid: Int
+    ) = getArticleList(ArticleType.ProjectDetailList, isRefresh, listModel, loadPageStatus, cid)
 
     private suspend fun getArticleList(
-        articleType: ArticleUserCase.ArticleType,
+        articleType: ArticleType,
         refresh: Boolean = false,
         listModel: MutableLiveData<ListModel<Article>>?,
         loadPageStatus: MutableLiveData<LoadPageStatus>,
@@ -49,7 +61,7 @@ class ArticleUserCase(var remoteDataSource: RemoteDataSource) {
         listModel?.postValue(ListModel(loadPageStatus = loadPageStatus))
         if (refresh) {
             currentPage =
-                if (articleType is ArticleUserCase.ArticleType.ProjectDetailList || articleType is ArticleUserCase.ArticleType.Share) 1 else 0
+                if (articleType is ArticleType.ProjectDetailList || articleType is ArticleType.Share) 1 else 0
         }
         var result = when (articleType) {
             ArticleType.Home -> remoteDataSource.getHomeArticles(currentPage)

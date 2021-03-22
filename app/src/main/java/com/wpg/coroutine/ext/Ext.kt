@@ -3,7 +3,10 @@ package com.wpg.coroutine.ext
 import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 
@@ -20,6 +23,14 @@ const val HOME_PAGE_CUT = "home_page_cut"
 fun TypedValue.resourceId(resId: Int, theme: Resources.Theme): Int {
     theme.resolveAttribute(resId, this, true)
     return this.resourceId
+}
+
+//加载子布局
+fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = true): View {
+    if (layout == -1) {
+        return this
+    }
+    return LayoutInflater.from(context).inflate(layout, this, attachToRoot)
 }
 
 //获取颜色
